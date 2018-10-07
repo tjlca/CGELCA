@@ -1,5 +1,4 @@
 *THis model does not take into consideration that all prices and quantities in a CCGE model are relative in nature. hence is it wrong
-
 $inlinecom /* */
 $offlisting
 $offsymxref
@@ -331,41 +330,6 @@ pf.fx("LAB") = 1;
 
 
 
-**********************************************************
-
-*Storing before shock environmental impact in a parameter
-
-*********************************************************
-
-
-parameter env0_l environmental Impact
-          env0_g global env impact
-          UU0  utility;
-env0_l = 73*0.9+72*2;
-env0_g = (84)*0.9+(85)*2;
-display env0_l;
-display env0_g;
-
-
-******************************************************************************************
-
-*Environmental Impact measurement
-
-*****************************************************************************************
-
-
-variable env_l local environmental impact
-	 env_g global environmental impact which includes imports;
-equation impact1,impact2;
-impact1.. env_l =E= Z('PR1')*0.9 + Z('PR2')*2- env0_l;
-impact2.. env_g =E= AQ('PR1')*0.9 + AQ('PR2')*2 - env0_g;
-
-
-**********************************************************
-
-**********************************************************
-
-
 
 
 **********************************************************************************
@@ -464,6 +428,39 @@ Link1.. p_F1_1 =E= pq('PR1')*2.8+pq('PR2')*1.5;
 Link2.. p_F1_2 =E= pq('PR1')*2.0+pq('PR1')*1.4;
 
 
+**********************************************************
+
+*Storing before shock environmental impact in a parameter
+
+*********************************************************
+
+
+parameter env0_l environmental Impact
+          env0_g global env impact
+          UU0  utility;
+env0_l = 73*0.9+72*2;
+env0_g = (84)*0.9+(85)*2;
+display env0_l;
+display env0_g;
+
+
+******************************************************************************************
+
+*Environmental Impact measurement
+
+*****************************************************************************************
+
+
+variable env_l local environmental impact
+         env_g global environmental impact which includes imports;
+equation impact1,impact2;
+impact1.. env_l =E= Z('PR1')*0.9 + Z('PR2')*2- env0_l;
+impact2.. env_g =E= AQ('PR1')*0.9 + AQ('PR2')*2 - env0_g;
+
+
+**********************************************************
+
+**********************************************************
 
 *******************************************************************************
 
@@ -734,7 +731,7 @@ Eobj4.. Ez4 =e= env_g+Value_chain_emission+Equipment_scale_emission;
 
 ******Equation for production of F1-conventional*******************************
 *F1-conventional = 1.5*PR1 + 2*PR2;
-*F1-Emergent = 1.3*PR1 + 1.8PR2; 
+*F1-Emergent = 1.3*PR1 + 1.8PR2;
 
 Equation Link3,Link4;
 
@@ -755,7 +752,7 @@ final_demand1.. demand_to_PR1 =E= Xp('PR1') - Xp0('PR1');
 final_demand2.. demand_to_PR2 =E= Xp('PR2') - Xp0('PR2');
 
 
-*We are fixing the pOUT value. This is becasue the engineering scale or equipment scale is a plant that does not change its output. If its output changes, the model will take advantages of the non linear effects in its equations and the scaling variables to reduce its emissions that should not be allowed. THe plant s working parameters (flow rates) should be fixed. 
+*We are fixing the pOUT value. This is becasue the engineering scale or equipment scale is a plant that does not change its output. If its output changes, the model will take advantages of the non linear effects in its equations and the scaling variables to reduce its emissions that should not be allowed. THe plant s working parameters (flow rates) should be fixed.
 
 
 

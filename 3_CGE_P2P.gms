@@ -1,5 +1,3 @@
-
-
 $inlinecom /* */
 $offlisting
 $offsymxref
@@ -419,7 +417,7 @@ p_F1_2    Actual Price of VC Scale product F1(Clean)($|kg);
 
 Parameter
 p0R1   Actual price at initial state  /2/
-p0R2   Actual price at initial state  /2.5/;
+p0R2   Actual price at initial state  /2.1/;
 
 
 
@@ -435,17 +433,21 @@ Parameter pq0(i);
 pq0('PR1') = 1;
 pq0('PR2') = 1;
 
-*We had  an actual price at the initial state. That price is changed to the numeraire in a CGE model. We know that ratio. We use that ratio to convert the prices from the CGE model to actual prices of the products. THis has the assumption that the ratio of conversiom from the actual price to the relative prices in the CGE model never changes from equilibrium to equilibrium. 
+*We had  an actual price at the initial state. That price is changed to the numeraire in a CGE model. We know that ratio. We use that ratio to convert the prices from the CGE model to actual prices of the products. THis has the assumption that the ratio of conversiom from the actual price to the relative prices in the CGE model never changes from equilibrium to equilibrium.
 
-*2.8 , 1.5 etc. are just constants to determine a price. 
+*2.8 , 1.5 etc. are just constants to determine a price.
 
 Equation Link1, Link2;
 Link1.. p_F1_1 =E= pq('PR1') * 2.8 * p0R1/pq0('PR1') + pq('PR2') * 1.5 * p0R2/pq0('PR2');
 Link2.. p_F1_2 =E= pq('PR1') * 2.0 * p0R1/pq0('PR1') + pq('PR2') * 1.4 * p0R2/pq0('PR2');
 
-*A very important property is that in normal IOLCA models we have an environmental impact factors in $/kg. These factors are determined by the total emission divided by the total economic throughout. But if price changes and flow doesnt change then then the economic throughput will also change. 
 
-*This results in a problem. If price increases IO model will overestimate emissions for the same production. If price decreases, IO model will underestimate emissions. Thus we need to change the impact factor according to the prices. 
+
+
+
+*A very important property is that in normal IOLCA models we have an environmental impact factors in $/kg. These factors are determined by the total emission divided by the total economic throughout. But if price changes and flow doesnt change then then the economic throughput will also change.
+
+*This results in a problem. If price increases IO model will overestimate emissions for the same production. If price decreases, IO model will underestimate emissions. Thus we need to change the impact factor according to the prices.
 
 **********************************************************
 
@@ -468,9 +470,11 @@ parameter env0_l environmental Impact
           UU0  utility;
 *env0_l = 73 * 0.9 * pq0('PR1')/p0R1  + 72 * 2 * pq0('PR2')/p0R2;
 *env0_g = 84 * 0.9 * pq0('PR1')/p0R1  + 85 * 2 * pq0('PR2')/p0R2;
+
+
 *The mistake was that I changed the quantity to actual quantity. But thats irrevelant because we are assuming we dont know the environmental impact / physcial quantity. We need the economic value.\\
 
-*So we change the equation. 
+*So we change the equation.
 env0_l = 73 * 0.9 * pq0('PR1')  + 72 * 2 * pq0('PR2');
 env0_g = 84 * 0.9 * pq0('PR1')  + 85 * 2 * pq0('PR2');
 
@@ -488,23 +492,23 @@ display env0_g;
 
 
 variable env_l local environmental impact
-	 env_g global environmental impact which includes imports;
+         env_g global environmental impact which includes imports;
 equation impact1,impact2;
 
-*Same changes. The Z is the relative quantity. Multiply that with relative price to get actual economic value. 
+*Same changes. The Z is the relative quantity. Multiply that with relative price to get actual economic value.
 
-*We have derive the emission factor / kg of product.So just need to get the actual quantity and multiply with the values. 
+*We have derive the emission factor / kg of product.So just need to get the actual quantity and multiply with the values.
 
-*The assumption here is that the emission factor / kg of product does not change from equilibrium to equilbrium. 
+*The assumption here is that the emission factor / kg of product does not change from equilibrium to equilbrium.
 
 *These does not make sense. If we can have the actual product value we will just
-*use life cycle inventories. 
+*use life cycle inventories.
 
-*The problem is that most times we dont know the price. So no idea of knowing the actual quantity. 
+*The problem is that most times we dont know the price. So no idea of knowing the actual quantity.
 
-*Its assumed that we know the actual price. 
+*Its assumed that we know the actual price.
 
-*Another assumption is that the ratio of NOrmalized price to actual price does not change with equilibrium. 
+*Another assumption is that the ratio of NOrmalized price to actual price does not change with equilibrium.
 
 
 *THe values are 1.8 kgCO2 / kg product1 and 5 kgCO2 / kg product2
@@ -513,8 +517,16 @@ equation impact1,impact2;
 *impact1.. env_l =E=  Z('PR1') * 0.9 * pq0('PR1')/p0R1 *  pq0('PR1')/pq('PR1')+ Z('PR2') * 2 * pq0('PR2')/p0R2 * pq0('PR2')/pq('PR2')- env0_l ;
 *impact2.. env_g =E=  AQ('PR1') * 0.9 * pq0('PR1')/p0R1 * pq0('PR1')/pq('PR1')+ AQ('PR2') * 2 * pq0('PR2')/p0R2 * pq0('PR2')/pq('PR2')- env0_g ;
 
-impact1.. env_l =E=  Z('PR1') * pq0('PR1')/p0R1 * 1.8 + Z('PR2') * 5 * pq0('PR2')/p0R2 - env0_l ;
-impact2.. env_g =E= AQ('PR1') * 1.8 * pq0('PR1')/p0R1 + AQ('PR2') * 5 * pq0('PR2')/p0R2 - env0_g ;
+
+*The prices need to be varied So I am using these equations to determine the per kg emissions rather than a fixed value.
+
+Parameter derived_IF_PR1,derived_IF_PR2;
+derived_IF_PR1 = 73*1*0.9/(73*1)*p0R1;
+derived_IF_PR2 = 72*1*2/(72*1)*p0R2;
+
+
+impact1.. env_l =E=  Z('PR1') * pq0('PR1')/p0R1 * derived_IF_PR1      +     Z('PR2') * derived_IF_PR2 * pq0('PR2')/p0R2     -      env0_l ;
+impact2.. env_g =E= AQ('PR1') * derived_IF_PR1 * pq0('PR1')/p0R1      +     AQ('PR2') * derived_IF_PR2 * pq0('PR2')/p0R2    -      env0_g ;
 
 
 
@@ -740,7 +752,7 @@ Variable Fz Economic objective
 Equation size_determination1,size_determination2;
 *Equation size_determination2 ;
 size_determination1.. size_of_conventional_flow =e= F1 * p2ps('6')-size_of_emergent_flow;
-size_determination2.. size_of_emergent_flow *(p2ps('1')+p2ps('2')) =e= F1 * p2ps('2') * p2ps('6');
+size_determination2.. size_of_emergent_flow *(p2ps('1')+p2ps('2')) =e= F1 * p2ps('6') * p2ps('2');
 
 Variable cost;
 *Yearly Profit*
@@ -792,23 +804,34 @@ Eobj4.. Ez4 =e= env_g+Value_chain_emission+Equipment_scale_emission;
 
 ******Equation for production of F1-conventional*******************************
 *F1-conventional = 1.5*PR1 + 2*PR2;
-*F1-Emergent = 1.3*PR1 + 1.8PR2; 
+*F1-Emergent = 1.3*PR1 + 1.8PR2;
 
 
 
 *In this equation we need to give final demand to the CGE model. The next question is what is this final demand? Is this the relative or actual final demand??
 
-*We need to put the relative quantity to the Xp because Xps are relative in the CGE model. 
+*We need to put the relative quantity to the Xp because Xps are relative in the CGE model.
 
-*From value chain scale we know the actual quantity. We need to know the relative quantity. 
+*From value chain scale we know the actual quantity. We need to know the relative quantity.
 
 Equation Link3,Link4;
 
 *Link3.. Xp('PR1')  =e= 1.5 * p2ps('1')  + 1.3 * p2ps('2') + Xp0('PR1');
 *Link4.. Xp('PR2')  =e= 2 * p2ps('1') + 1.8 * p2ps('2') + Xp0('PR2');
 
-Link3.. Xp('PR1')  =e= (1.5 * p2ps('1') * p0R1/pq0('PR1')  + 1.3 * p2ps('2') * p0R1/pq0('PR1')) + Xp0('PR1');
-Link4.. Xp('PR2')  =e= (2.0 * p2ps('1') * p0R2/pq0('PR2')  + 1.8 * p2ps('2') * p0R2/pq0('PR2')) + Xp0('PR2');
+Link3.. Xp('PR1')  =g= (1.5 * p2ps('1') * p0R1/pq0('PR1')  + 1.3 * p2ps('2') * p0R1/pq0('PR1')) + Xp0('PR1');
+Link4.. Xp('PR2')  =g= (2.0 * p2ps('1') * p0R2/pq0('PR2')  + 1.8 * p2ps('2') * p0R2/pq0('PR2')) + Xp0('PR2');
+
+
+Xp.Lo('PR1') = 20;
+Xp.Lo('PR2') = 30;
+Xp.L('PR1') = 25;
+Xp.L('PR2') = 35;
+
+
+
+*Link3.. Xp('PR1')   =g= 1.5 * p2ps('1') * 2.0 + 1.3 * p2ps('2') * 2.0 + Xp0('PR1');
+*Link4.. Xp('PR2')   =g= 2 * p2ps('1') * 2.1 + 1.8 * p2ps('2') * 2.1 + Xp0('PR2');
 
 
 
@@ -824,7 +847,7 @@ final_demand1.. demand_to_PR1 =E= (Xp('PR1') - Xp0('PR1'))*pq0('PR1')/p0R1;
 final_demand2.. demand_to_PR2 =E= (Xp('PR2') - Xp0('PR2'))*pq0('PR2')/p0R2;
 
 
-*We are fixing the pOUT value. This is becasue the engineering scale or equipment scale is a plant that does not change its output. If its output changes, the model will take advantages of the non linear effects in its equations and the scaling variables to reduce its emissions that should not be allowed. THe plant s working parameters (flow rates) should be fixed. 
+*We are fixing the pOUT value. This is becasue the engineering scale or equipment scale is a plant that does not change its output. If its output changes, the model will take advantages of the non linear effects in its equations and the scaling variables to reduce its emissions that should not be allowed. THe plant s working parameters (flow rates) should be fixed.
 
 
 
@@ -855,24 +878,43 @@ Set ANSWER /OUTPUT_OF_GAMS_CODE/;
 *******************************Writing Header in Output File*******************************************************
 
 file fx /%mydata%/;
+
+
+
 fx.ps = 200;
 fx.pw = 30000;
 fx.nd = 2;
 fx.ap = 1;
 fx.pc=5;
+fx.nw = 6;
 put fx;
 put 'Fin_dem'                     ;
+put ''                         ;
 put 'Eq_em'                       ;
+put ''                         ;
 put 'Eq+VC'                       ;
+put ''                         ;
 put 'EqVCCGe'                     ;
+put ''                         ;
 put 'Total'                       ;
+put ''                         ;
 put 'Rate'                        ;
+put ''                         ;
 put 'Effc'                        ;
+put ''                         ;
 put 'Cos'                         ;
+put ''                         ;
 put 'Conv Flow'                   ;
+put ''                         ;
 put 'Emer Flow'                   ;
+put ''                         ;
 put 'Price_Conv'                  ;
+put ''                         ;
 put 'Price_em'                    ;
+put ''                         ;
+put 'DEM1'                        ;
+put ''                         ;
+put 'DEM2'
 putclose;
 
 
