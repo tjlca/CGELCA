@@ -417,7 +417,7 @@ p_F1_2    Actual Price of VC Scale product F1(Clean)($|kg);
 
 Parameter
 p0R1   Actual price at initial state  /2/
-p0R2   Actual price at initial state  /2.1/;
+p0R2   Actual price at initial state  /2.5/;
 
 
 
@@ -577,7 +577,7 @@ F2.L = 10;
 Equations Eng1,Eng2,Eng4,Eng5,Eng6,Eng7,Eng8,Eng9,Eng10,Eng11;
 Eng1.. F1 =e= F2*0.8;
 Eng2.. POut =E= (F2*Rate + F1*Efficiency);
-Eng4.. EqCO2*2 =e= (100*1/F1*0.8*Efficiency+Rate*1/F2*20);
+Eng4.. EqCO2*20 =e= (100*1/F1*0.8*Efficiency+Rate*1/F2*20)**2.5;
 
 Eng6.. PV =e= (Profit / 0.07) * (1 - (1 / ((1.07)**20)));
 Eng7.. TCI =e= 30000 * Rate;
@@ -883,38 +883,25 @@ file fx /%mydata%/;
 
 fx.ps = 200;
 fx.pw = 30000;
-fx.nd = 2;
+fx.nd = 3;
 fx.ap = 1;
-fx.pc=5;
-fx.nw = 6;
+fx.pc = 8;
+*fx.nw = 6;
 put fx;
-put 'Fin_dem'                     ;
-put ''                         ;
-put 'Eq_em'                       ;
-put ''                         ;
-put 'Eq+VC'                       ;
-put ''                         ;
-put 'EqVCCGe'                     ;
-put ''                         ;
-put 'Total'                       ;
-put ''                         ;
+put 'Demand'                      ;
+put 'Eqem'                       ;
+put 'EqVC'                       ;
+put 'EqVCLocal'                     ;
+put 'Global'                       ;
 put 'Rate'                        ;
-put ''                         ;
 put 'Effc'                        ;
-put ''                         ;
-put 'Cos'                         ;
-put ''                         ;
-put 'Conv Flow'                   ;
-put ''                         ;
-put 'Emer Flow'                   ;
-put ''                         ;
+put 'Cost'                         ;
+put 'Conv_Flow'                   ;
+put 'Emer_Flow'                   ;
 put 'Price_Conv'                  ;
-put ''                         ;
 put 'Price_em'                    ;
-put ''                         ;
 put 'DEM1'                        ;
-put ''                         ;
-put 'DEM2'
+put 'DEM2'                        ;
 putclose;
 
 
