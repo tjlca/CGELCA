@@ -1,10 +1,10 @@
-*option limrow = 0;
-*option limcol = 0;
-*option sysout = off;
-*option solprint = off;
+option limrow = 0;
+option limcol = 0;
+option sysout = off;
+option solprint = off;
 
 
-$include 3_CGE_P2P.gms
+$include 5_CGE_P2P.gms
 *********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************
 
 *********************OPTIMIZATION RUNS********************************
@@ -13,7 +13,7 @@ $include 3_CGE_P2P.gms
 
 
 Parameter demand /20/;
-Set count /1*100/;
+Set count /1*1/;
 
 
 Loop(count,
@@ -25,7 +25,6 @@ demand = demand + 5;
 
 
 ****************************Solving forCGE local+ global + VC+ Equipment Scale emission**********************************************
-
 
 
 Solve CGEP2P minimizing Ez4 using NLP;
