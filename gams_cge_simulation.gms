@@ -13,7 +13,7 @@ $include 5_CGE_P2P.gms
 
 
 Parameter demand /20/;
-Set count /1*1/;
+Set count /1*10/;
 
 
 Loop(count,
