@@ -850,8 +850,8 @@ Equation Link3,Link4;
 *Link3.. Xp('PR1')  =e= 1.5 * p2ps('1')  + 1.3 * p2ps('2') + Xp0('PR1');
 *Link4.. Xp('PR2')  =e= 2 * p2ps('1') + 1.8 * p2ps('2') + Xp0('PR2');
 
-Link3.. Xp('PR1')  =E= (1.5 * p2ps('1') * p0R1/pq0('PR1')  + 1.3 * p2ps('2') * p0R1/pq0('PR1')) + Xp0('PR1');
-Link4.. Xp('PR2')  =E= (2.0 * p2ps('1') * p0R2/pq0('PR2')  + 1.8 * p2ps('2') * p0R2/pq0('PR2')) + Xp0('PR2');
+Link3.. Xp('PR1')  =G= (1.5 * p2ps('1') * p0R1/pq0('PR1')  + 1.3 * p2ps('2') * p0R1/pq0('PR1')) + Xp0('PR1');
+Link4.. Xp('PR2')  =G= (2.0 * p2ps('1') * p0R2/pq0('PR2')  + 1.8 * p2ps('2') * p0R2/pq0('PR2')) + Xp0('PR2');
 
 
 

@@ -591,7 +591,6 @@ NPVt     NPV for producing the final demand ($)
 *Equipment scale model constraints (0.1 <= Rate({z}) <= 0.9)
 Rate.LO = 0.1;
 Rate.UP = 0.9;
-Rate.L = 0.5;
 Scalar Eqs Eq scale process scaling vector to convert h to y /8000/;
 
 
@@ -610,7 +609,6 @@ Equations Eng1,Eng2,Eng4,Eng5,Eng6,Eng7,Eng8,Eng9,Eng10,Eng11;
 Eng1.. F1 =e= F2*0.8;
 Eng2.. POut =E= (F2*Rate + 0.01*F1/Efficiency);
 Eng4.. EqCO2*50 =e= (11/F1*0.9/Efficiency+Rate*1/F2*20)**2;
-
 Eng6.. PV =e= (Profit / 0.07) * (1 - (1 / ((1.07)**20)));
 Eng7.. TCI =e= 30000 * Rate;
 Eng8.. NPV =e= (PV - TCI) / 20;
@@ -823,9 +821,6 @@ Eobj4.. Ez4 =e= env_g+Value_chain_emission+Equipment_scale_emission;
 
 *************************** Only Conventional Technology Exists****************
 
-****Constraint to model such a state
-
-*p2ps.FX('2') = 0.0;
 
 *******************************************************************************
 
@@ -835,7 +830,7 @@ Eobj4.. Ez4 =e= env_g+Value_chain_emission+Equipment_scale_emission;
 
 ******Equation for production of F1-conventional*******************************
 *F1-conventional = 1.5*PR1 + 2*PR2;
-*F1-Emergent = 1.3*PR1 + 1.8PR2;
+*F1-Emergent = 1.5*PR1 + 2*PR2;
 
 
 
@@ -847,16 +842,9 @@ Eobj4.. Ez4 =e= env_g+Value_chain_emission+Equipment_scale_emission;
 
 Equation Link3,Link4;
 
-*Link3.. Xp('PR1')  =e= 1.5 * p2ps('1')  + 1.3 * p2ps('2') + Xp0('PR1');
-*Link4.. Xp('PR2')  =e= 2 * p2ps('1') + 1.8 * p2ps('2') + Xp0('PR2');
 
-Link3.. Xp('PR1')  =E= (1.5 * p2ps('1') * p0R1/pq0('PR1')  + 1.3 * p2ps('2') * p0R1/pq0('PR1')) + Xp0('PR1');
-Link4.. Xp('PR2')  =E= (2.0 * p2ps('1') * p0R2/pq0('PR2')  + 1.8 * p2ps('2') * p0R2/pq0('PR2')) + Xp0('PR2');
-
-
-
-*Link3.. Xp('PR1')   =g= 1.5 * p2ps('1') * 2.0 + 1.3 * p2ps('2') * 2.0 + Xp0('PR1');
-*Link4.. Xp('PR2')   =g= 2 * p2ps('1') * 2.1 + 1.8 * p2ps('2') * 2.1 + Xp0('PR2');
+Link3.. Xp('PR1')  =G=0.2* (1.5 * p2ps('1') * p0R1/pq0('PR1')  + 1.5 * p2ps('2') * p0R1/pq0('PR1')) + Xp0('PR1');
+Link4.. Xp('PR2')  =G=0.2* (2.0 * p2ps('1') * p0R2/pq0('PR2')  + 2.0 * p2ps('2') * p0R2/pq0('PR2')) + Xp0('PR2');
 
 
 
@@ -889,13 +877,9 @@ pOUT.FX = 1;
 *******************************************************************************
 
 Model CGEP2P /all/;
-CGEP2P.optfile = 1;
+CGEP2P.optfile = 1
 
-*Option optCR = 0.20;
-*Option NLP = BARON;
-*Option NLP = CONOPT;
 Option NLP = %mydata%;
-*option bRatio = 1;
 
 
 Set ANSWER /OUTPUT_OF_GAMS_CODE/;
