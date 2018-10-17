@@ -1,5 +1,5 @@
-*We are changing the import emissions to show the effect  of trade. ALong with that we are also changing the cobination function of the products from the economy to make the prices at the value chain scale. basically we are making the emergent flow costlier than the conventional flow to get a nice pareto.
-*Had to change a constrain to =G= for code to run properly. 
+*Demands for the two products are same from the economy scale. 
+
 
 $inlinecom /* */
 $offlisting
@@ -593,7 +593,7 @@ Rate.LO = 0.1;
 Rate.UP = 0.9;
 Scalar Eqs Eq scale process scaling vector to convert h to y /8000/;
 
-
+Rate.FX = 0.38;
 
 Variable Efficiency Defined for controlling how efficient the process is 0.1<====<0.9;
 
